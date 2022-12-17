@@ -15,11 +15,9 @@ return new class extends Migration
     {
         Schema::create('questionnaires', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("que_sec_id");
-            $table->text("question");
+            $table->string("title");
+            $table->dateTime("expiry_date");
             $table->timestamps();
-
-            $table->foreign('que_sec_id')->references('id')->on('question_sections');
         });
     }
 

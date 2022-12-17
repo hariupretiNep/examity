@@ -19,7 +19,7 @@ class AnswerOptionFactory extends Factory
         return [
             'answer' => fake()->sentence(1),
             'correct' => fake()->boolean(4),
-            'question_id' => \App\Models\Questionnaire::all()->random()->id,
+            'question_id' => \App\Models\Question::all()->random()->id,
         ];
     }
 }

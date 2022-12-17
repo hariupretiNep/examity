@@ -17,7 +17,7 @@ class AnswerFactory extends Factory
     public function definition()
     {
         $studentId = \App\Models\Student::all()->random()->id;
-        $questionId = \App\Models\Questionnaire::all()->random()->id;
+        $questionId = \App\Models\Question::all()->random()->id;
 
         return [
             'student_id' => $studentId,

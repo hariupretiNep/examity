@@ -35,4 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Authenticated User Section
+    include_once 'modules/Questionnaire.php';
+});
+
 require __DIR__.'/auth.php';

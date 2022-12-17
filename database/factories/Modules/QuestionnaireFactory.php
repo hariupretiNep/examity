@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Modules;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Questionnaire>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Modules\Questionnaire>
  */
 class QuestionnaireFactory extends Factory
 {
@@ -17,8 +17,7 @@ class QuestionnaireFactory extends Factory
     public function definition()
     {
         return [
-            'question' => fake()->sentence(5),
-            'que_sec_id' => \App\Models\QuestionSection::all()->random()->id,
+            //
         ];
     }
 }

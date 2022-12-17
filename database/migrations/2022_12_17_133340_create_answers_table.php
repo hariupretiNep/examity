@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students');
-            $table->foreign('question_id')->references('id')->on('questionnaires');
+            $table->foreign('question_id')->references('id')->on('questions');
             $table->foreign('answer_id')->references('id')->on('answer_options');
         });
     }

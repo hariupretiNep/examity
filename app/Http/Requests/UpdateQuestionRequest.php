@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreQuestionnaireRequest extends FormRequest
+class UpdateQuestionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreQuestionnaireRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,8 +24,7 @@ class StoreQuestionnaireRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string'],
-            'expiry_date' => ['required', 'date'],
+            //
         ];
     }
 }

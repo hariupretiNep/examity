@@ -6,7 +6,7 @@ use App\Http\Requests\StoreQuestionnaireRequest;
 use App\Http\Requests\UpdateQuestionnaireRequest;
 use App\Models\Questionnaire;
 
-class QuestionnaireController extends Controller
+class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
