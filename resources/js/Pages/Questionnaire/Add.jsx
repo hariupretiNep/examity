@@ -9,7 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function Dashboard(props) {
+export default function Add(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         title: '',
         expiry_date: new Date(),
@@ -60,7 +60,16 @@ export default function Dashboard(props) {
                             </div>
                             <div className="m-4">
                             <InputLabel forInput="expiryDate" value="Expiry Date" />
-                            <DatePicker className="rounded-md p-1 mt-1" selected={data.expiry_date} onChange={(date) => onDateChange(date)} showTimeSelect dateFormat="Pp" />
+                            <DatePicker className="rounded-md p-1 mt-1" 
+                            selected={data.expiry_date} 
+                            onChange={(date) => onDateChange(date)}
+                            minDate={new Date()}
+                            showTimeSelect
+                            timeFormat="p"
+                            timeIntervals={15}
+                            dateFormat="Pp"
+                            isClearable
+                            />
                             <InputError message={errors.expiry_date} className="mt-2" />
                             </div>
                             <div className="m-4 mt-8">

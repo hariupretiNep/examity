@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Modules;
 
 use Inertia\Inertia;
+use App\Models\Question;
+use App\Models\QuestionSection;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Questionnaire;
 use App\Http\Requests\StoreQuestionnaireRequest;
 use App\Http\Requests\UpdateQuestionnaireRequest;
+use App\Models\QuestionnaireQuestions;
 
 class QuestionnaireController extends Controller
 {
@@ -17,7 +21,8 @@ class QuestionnaireController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Questionnaire/List');
+        $activeQuestionnaire = Questionnaire::where("expiry_date",">=",date("Y-m-d H:i:s"))->get();
+        return Inertia::render('Questionnaire/List',["activeQuestionnaires"=>$activeQuestionnaire]);
     }
 
     /**
@@ -38,8 +43,22 @@ class QuestionnaireController extends Controller
      */
     public function store(StoreQuestionnaireRequest $request)
     {
-        $formatedDate = date("Y-m-d H:i:s",strtotime($request->expiry_date));
-        dd($formatedDate);
+        $formatedExpiryDate = date("Y-m-d H:i:s",strtotime($request->expiry_date));
+        $newQuestionnaire = new Questionnaire();
+        $newQuestionnaire->title = $request->title;
+        $newQuestionnaire->expiry_date = $formatedExpiryDate;
+        if($newQuestionnaire->save()){
+            //Generate random 10 questions
+            $randomQuestions = new Questionnaire();
+            $recordStatus = $randomQuestions->generateRandomQuestions($newQuestionnaire);
+            if($recordStatus){
+                return Inertia::render('Questionnaire/List')->with("success","Questionnaire generated successfully");
+            }else{
+                return Inertia::render('Questionnaire/List')->with("failed","Unable to generate questionnaire");
+            }
+        }else{
+            return Inertia::render('Questionnaire/List')->with("failed","Questionnaire could not be created");
+        }
     }
 
     /**

@@ -116,7 +116,14 @@ export default function Authenticated({ auth, header, children }) {
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                 </header>
             )}
-
+            {
+                <div className='max-w-7xl mt-4 mx-auto'>
+                    <div className='mx-8 p-2 bg-green-300 border border-green-600 grid grid-flow-col grid-cols-12'>
+                        <div className='col-span-11'>Success message will show here</div>
+                        <div className='text-right'> Cross</div>
+                    </div>
+                </div>
+            }
             <main>{children}</main>
         </div>
     );
