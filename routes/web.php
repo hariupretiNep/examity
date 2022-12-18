@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Authenticated User Section
     include_once 'modules/Questionnaire.php';
+    include_once 'modules/Invitation.php';
 });
 
 require __DIR__.'/auth.php';

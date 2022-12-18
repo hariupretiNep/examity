@@ -52,6 +52,7 @@ class ProcessExamityEmail implements ShouldQueue
                 //Invitation recorded on db, start mailing the it to associated student.
                 Mail::to($eachStudent->email)->send(new ExamInvitationForStudent($eachStudent,$uniqueInvitationCode));
             }
+            sleep(1);
         }
     }
 

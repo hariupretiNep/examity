@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules;
 
+use App\Models\Question;
 use Illuminate\Support\Facades\DB;
 use App\Models\QuestionnaireQuestions;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Questionnaire extends Model
 {
     use HasFactory;
+
+    public function questions(){
+        return $this->belongsToMany(Question::class,'questionnaire_questions','questionnaire_id','question_id');
+    }
 
     public function generateRandomQuestions(Questionnaire $newQuestionnaire){
         $latestQuestionnaireId = $newQuestionnaire->id;

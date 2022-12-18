@@ -29,7 +29,7 @@ class ExamInvitationForStudent extends Mailable
     {
         $this->student = $student;
         $this->inviationCode = $code;
-        $this->invitationLink = URL::to("?invitation=$code");
+        $this->invitationLink = URL::to("/invitation/$code");
     }
 
     /**

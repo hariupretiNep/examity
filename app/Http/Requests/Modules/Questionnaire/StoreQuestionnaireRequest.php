@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Modules\Questionnaire;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +25,7 @@ class StoreQuestionnaireRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'expiry_date' => ['required', 'date'],
+            'expiry_date' => ['required', 'date','after:'.date("Y-m-d H:i:s", strtotime("+15 minutes"))],
         ];
     }
 }
