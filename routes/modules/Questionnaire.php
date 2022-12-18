@@ -8,4 +8,7 @@ Route::prefix('/questionnaire')->group(function () {
     Route::get('/new',[QuestionnaireController::class,'create'])->name("addQuestionnaire");
     Route::post('/add',[QuestionnaireController::class,'store'])->name("createQuestionnaire");
 
+    Route::get('/email',function(){
+        return view("email.StudentInvitation");
+    });
 });

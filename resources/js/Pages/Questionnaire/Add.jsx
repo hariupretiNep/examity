@@ -60,7 +60,7 @@ export default function Add(props) {
                             </div>
                             <div className="m-4">
                             <InputLabel forInput="expiryDate" value="Expiry Date" />
-                            <DatePicker className="rounded-md p-1 mt-1" 
+                            <DatePicker className="rounded-md p-1 mt-1 w-[90%]" 
                             selected={data.expiry_date} 
                             onChange={(date) => onDateChange(date)}
                             minDate={new Date()}

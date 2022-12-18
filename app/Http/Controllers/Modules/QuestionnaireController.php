@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Modules\Questionnaire;
 use App\Http\Requests\StoreQuestionnaireRequest;
 use App\Http\Requests\UpdateQuestionnaireRequest;
+use App\Jobs\ProcessExamityEmail;
 use App\Models\QuestionnaireQuestions;
 
 class QuestionnaireController extends Controller
@@ -52,12 +53,14 @@ class QuestionnaireController extends Controller
             $randomQuestions = new Questionnaire();
             $recordStatus = $randomQuestions->generateRandomQuestions($newQuestionnaire);
             if($recordStatus){
-                return Inertia::render('Questionnaire/List')->with("success","Questionnaire generated successfully");
+                //Start sending invition link to student
+                dispatch(new ProcessExamityEmail($newQuestionnaire));
+                return redirect(route('questionnaire'))->with("success","Questionnaire generated successfully");
             }else{
-                return Inertia::render('Questionnaire/List')->with("failed","Unable to generate questionnaire");
+                return redirect(route('questionnaire'))->with("failed","Unable to generate questionnaire");
             }
         }else{
-            return Inertia::render('Questionnaire/List')->with("failed","Questionnaire could not be created");
+            return redirect(route('questionnaire'))->with("failed","Questionnaire could not be created");
         }
     }
 
