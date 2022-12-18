@@ -9,6 +9,9 @@ use App\Models\QuestionSection;
 use App\Models\StudentInvitation;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Questionnaire;
+use App\Http\Requests\Modules\Invitation\StartInvitationRequest;
+use App\Http\Requests\Modules\Invitation\SubmitInvitationTestRequest;
+use App\Models\Answer;
 
 class InvitationController extends Controller
 {
@@ -24,32 +27,12 @@ class InvitationController extends Controller
                 $questionnaireDetail = $getInvitationDetail->questionnaire;
                 if(!empty($studentDetail) && !empty($questionnaireDetail)){
                     //get the list of questions
-                    $questionnaireWithQuestions = Questionnaire::with("questions")->findOrFail($questionnaireDetail->id);
-                    $finalData["questionnaire"] = ["title"=>$questionnaireWithQuestions->title,"id"=>$questionnaireWithQuestions->id,"expiry_date"=>$questionnaireWithQuestions->expiry_date];
+                    $finalData["questionnaire"] = ["title"=>$questionnaireDetail->title,"id"=>$questionnaireDetail->id,"expiry_date"=>$questionnaireDetail->expiry_date];
                     $finalData["student"] = ["name"=>$studentDetail->name,"id"=>$studentDetail->id,"email"=>$studentDetail->email];
+                    $finalData["invitation_code"] = $invitationCode;
                     // Validate the questionnaire is already expired or not
                     if(strtotime($finalData["questionnaire"]["expiry_date"]) > strtotime(date("Y-m-d H:i:s"))){
-                        $sectionIdWithName = $questionAnswerOptions = [];
-                        $availableQuestions = $questionnaireWithQuestions->questions->toArray("id","que_sec_id","question");
-                        $questionSectionIds = array_unique($questionnaireWithQuestions->questions->pluck("que_sec_id")->toArray());
-                        $questionSectionName = QuestionSection::whereIn("id",$questionSectionIds)->get(["id","name"]);
-                        foreach ($questionSectionName as $eachSection) {
-                            $sectionIdWithName[$eachSection->id] = $eachSection->name;
-                        }
-
-                        $questionIds = array_unique($questionnaireWithQuestions->questions->pluck("id")->toArray());
-                        $answerOptions = AnswerOption::whereIn("question_id",$questionIds)->get(["id","answer","question_id"])->toArray();
-                        foreach ($answerOptions as $eachOptions) {
-                            $questionAnswerOptions[$eachOptions["question_id"]][] = $eachOptions;
-                        }
-                        foreach ($availableQuestions as $eachQuestion) {
-                            $answerOptions = [];
-                            $answerOptions = array_key_exists($eachQuestion["id"],$questionAnswerOptions)?$questionAnswerOptions[$eachQuestion["id"]]:[];
-                            $finalData["sectionWise"][$sectionIdWithName[$eachQuestion["que_sec_id"]]][] = ["question_id"=>$eachQuestion["id"],"question"=>$eachQuestion["question"],"options"=>$answerOptions];
-                            $finalData["allquestion"][] = ["question_id"=>$eachQuestion["id"],"question"=>$eachQuestion["question"],"options"=>$answerOptions];
-                        }
-                        $allQuestions = (object) $finalData["allquestion"];
-                        return Inertia::render('Invitation/Start',["questionnaire"=>$finalData,"questions"=>$allQuestions]);
+                        return Inertia::render('Invitation/Start',["data"=>$finalData]);
                     }else{
                         die("The test is already expired");
                     }
@@ -57,6 +40,40 @@ class InvitationController extends Controller
             }
         }else{
             die("Invitation code does not exist");
+        }
+    }
+
+    public function startInvitationTest(StartInvitationRequest $invitationRequest) {
+        //Student want to start test, validate and proceed
+        $invitationRecord = StudentInvitation::where(["invitation_code"=>$invitationRequest->invitation_code,"student_id"=>$invitationRequest->student_id,"questionnaire_id"=>$invitationRequest->questionnaire_id])->first();
+        if(!empty($invitationRecord)){
+            $questionnaireDetails = Questionnaire::with("questions")->findOrFail($invitationRecord->id);
+            $allQuestions = $questionnaireDetails->questions->toArray();
+            $collectQuestionIds = $questionnaireDetails->questions->pluck("id")->toArray();
+            $getAnswerOptions = AnswerOption::whereIn("question_id",$collectQuestionIds)->get(["id","answer","question_id"])->toArray();
+            $prepareData = [];
+            foreach ($allQuestions as $eachQuestion) {
+                $prepareData[$eachQuestion["id"]] = ["que_id"=>$eachQuestion["id"],"question"=>$eachQuestion["question"]];
+            }
+            foreach ($getAnswerOptions as $eachOption) {
+                $prepareData[$eachOption["question_id"]]["options"][] = $eachOption;
+            }
+            return response()->json(["data"=>$prepareData]);
+        }else{
+            die("Provided information not matched with our records");
+        }
+    }
+
+    public function submitInvitationTest(SubmitInvitationTestRequest $request){
+        $submittedAnswers = $request->answers;
+        $record = Answer::insert($submittedAnswers);
+        $invitationDetails = StudentInvitation::where("invitation_code",$request->invitation_code)->first();
+        $invitationDetails->used = 1;
+        $invitationDetails->save();
+        if($record){
+            return response()->json(["success"=>true]);
+        }else{
+            return response()->json(["success"=>false]);
         }
     }
 }

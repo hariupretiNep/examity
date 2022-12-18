@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Authenticated User Section
     include_once 'modules/Questionnaire.php';
-    include_once 'modules/Invitation.php';
 });
-
+//Anyone will have access on invitation through valid link
+include_once 'modules/Invitation.php';
 require __DIR__.'/auth.php';
