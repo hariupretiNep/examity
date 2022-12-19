@@ -12,8 +12,8 @@ Examity is a web application which is capable to handle online examination syste
 ## Project Setup
 - Clone the project from Master branch. [Master](https://github.com/hariupretiNep/examity)
 - Copy .env.example to .env
-- Install PHP version ^8.0.2
-- Install node version v16.17.0
+- Install PHP version ^8.1.11
+- Install node version v16.16.0
 - Run following command on project directory to install required dependencies
 ```php
 composer install
@@ -21,14 +21,15 @@ npm install
 
 //migration and seeder
 php artisan migrate:fresh --seed
+
+//Listen for jobs
+php artisan queue:listen
 ```
 
 ```Once you done with above steps, now it's time to run project locally```
 
 ```php
 php artisan serve
-npm run dev
-    or
 npm run build
 ```
 Open the running host and port on your browser. Following is the default credentails of seeded admin.
@@ -36,8 +37,3 @@ Open the running host and port on your browser. Following is the default credent
 Email: admin@examity.com
 Password: password
 ```
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within this appalication, please send an e-mail to Hari Upreti via [hariupreti1996@gmail.com](mailto:hariupreti1996@gmail.com). All security vulnerabilities will be promptly addressed.
-
