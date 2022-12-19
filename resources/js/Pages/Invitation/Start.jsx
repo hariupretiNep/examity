@@ -34,6 +34,7 @@ export default function Start(props) {
         }
         setAnswers(allAnswer);
         setLoad(!load);
+        console.log(allAnswer);
     }
 
     const submitAnswer = () => {
@@ -77,7 +78,7 @@ export default function Start(props) {
                         {
                             Object.keys(questions[key].options).map((innerkey,index) => {
                                 return <div onClick={() => selectAnswer(questions[key].options[innerkey].question_id,questions[key].options[innerkey].id)} key={"inner"+index} 
-                                className={`${answers.findIndex(eachAns => (eachAns.question_id === questions[key].options[innerkey].question_id && eachAns.answer_id === questions[key].options[innerkey].id)) != -1?"bg-blue-300 hover:bg-blue-400":"bg-slate-300"} border border-gray-400 p-4 rounded-md m-2 cursor-pointer bg-slate-100 hover:border-gray-600 hover:bg-slate-50`}>
+                                className={`${answers.findIndex(eachAns => (eachAns.question_id === questions[key].options[innerkey].question_id && eachAns.answer_id === questions[key].options[innerkey].id)) != -1?"bg-blue-400 hover:bg-blue-500":"bg-slate-300"} border border-gray-400 p-4 rounded-md m-2 cursor-pointer bg-slate-100 hover:border-gray-600 hover:bg-slate-50`}>
                                 {questions[key].options[innerkey].answer}</div>
                             })
                         }

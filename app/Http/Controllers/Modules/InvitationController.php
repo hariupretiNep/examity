@@ -19,7 +19,7 @@ class InvitationController extends Controller
         $getInvitationDetail = StudentInvitation::where("invitation_code",$invitationCode)->with("student")->first();
         if(!empty($getInvitationDetail)){
             if($getInvitationDetail->used == 1){
-                die("You are not allowed to access the test more then one time");
+                die("You are not allowed to access the test more than one time");
             }else{
                 //Proceed student for the online examination
                 $finalData = [];
@@ -47,7 +47,7 @@ class InvitationController extends Controller
         //Student want to start test, validate and proceed
         $invitationRecord = StudentInvitation::where(["invitation_code"=>$invitationRequest->invitation_code,"student_id"=>$invitationRequest->student_id,"questionnaire_id"=>$invitationRequest->questionnaire_id])->first();
         if(!empty($invitationRecord)){
-            $questionnaireDetails = Questionnaire::with("questions")->findOrFail($invitationRecord->id);
+            $questionnaireDetails = Questionnaire::with("questions")->findOrFail($invitationRecord->questionnaire_id);
             $allQuestions = $questionnaireDetails->questions->toArray();
             $collectQuestionIds = $questionnaireDetails->questions->pluck("id")->toArray();
             $getAnswerOptions = AnswerOption::whereIn("question_id",$collectQuestionIds)->get(["id","answer","question_id"])->toArray();
